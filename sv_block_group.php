@@ -74,9 +74,9 @@
 		}
 
 		protected function register_scripts(): sv_block_group {
-			if($this->get_setting('extra_styles')->get_data() && count($this->get_setting('extra_styles')->get_data()) > 0) {
-				$attributes		= array();
+			$attributes		= array();
 
+			if($this->get_setting('extra_styles')->get_data() && count($this->get_setting('extra_styles')->get_data()) > 0) {
 				foreach ($this->get_setting('extra_styles')->get_data() as $extra_style) {
 					$attributes[$extra_style['slug']] = $extra_style['entry_label'];
 				}
