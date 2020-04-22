@@ -110,12 +110,8 @@
 			return $this;
 		}
 		public function enqueue_scripts(): sv_block_group {
-			if( ! is_admin() ) {
-				$post = get_post();
-
-				if ( !has_block( 'group', $post )) {
-					return $this;
-				}
+			if(!$this->has_block_frontend('group')){
+				return $this;
 			}
 
 			$this->get_script( 'common' )->set_is_enqueued();
