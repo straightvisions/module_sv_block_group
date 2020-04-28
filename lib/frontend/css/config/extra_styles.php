@@ -42,7 +42,7 @@
 					}
 				}
 				echo $_s->build_css(
-					is_admin() ? '.editor-styles-wrapper ul, .editor-styles-wrapper .wp-block-group.is-style-' . $extra_style['slug'] : '.sv100_sv_content_wrapper article ul, .sv100_sv_content_wrapper article .wp-block-group.is-style-' . $extra_style['slug'],
+					is_admin() ? '.editor-styles-wrapper .wp-block-group.is-style-' . $extra_style['slug'] : '.sv100_sv_content_wrapper article .wp-block-group.is-style-' . $extra_style['slug'],
 					$properties
 				);
 			}
