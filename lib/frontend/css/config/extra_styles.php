@@ -1,78 +1,50 @@
 <?php
-	if($extra_styles && count($extra_styles) > 0) {
-		foreach($extra_styles as $extra_style) {
+	$extra_styles			= $script->get_parent()->get_setting('extra_styles');
+	$extra_styles_data		= $script->get_parent()->get_setting('extra_styles')->get_data();
+	if($extra_styles_data && is_array($extra_styles_data) && count($extra_styles_data) > 0) {
+		// loop through saved group setting values
+		foreach($extra_styles_data as $extra_style) {
+			if($extra_style) {
+				$properties				= array();
 
-			// Margin
-			if ($extra_style['margin']) {
-				$margin = $extra_style['margin'];
+				$fields					= array('padding','margin','border');
 
-				$imploded = false;
-				foreach ($margin as $breakpoint => $val) {
-					$top = (isset($val['top']) && strlen($val['top']) > 0) ? $val['top'] : false;
-					$right = (isset($val['right']) && strlen($val['right']) > 0) ? $val['right'] : false;
-					$bottom = (isset($val['bottom']) && strlen($val['bottom']) > 0) ? $val['bottom'] : false;
-					$left = (isset($val['left']) && strlen($val['left']) > 0) ? $val['left'] : false;
+				// retrieve saved data
+				foreach($extra_style as $ID => $data){
+					// only for group fields needed (no label or ID fields are used for output)
+					if(in_array($ID,$fields)) {
+						// create a new setting object and clone it to avoid cross-interferences with more than one setting group items
+						$temp = clone $script->get_parent()->get_setting('temp_'.$ID);
 
-					if($top !== false || $right !== false || $bottom !== false || $left !== false) {
-						$imploded[$breakpoint] = $top . ' ' . $right . ' ' . $bottom . ' ' . $left;
+						// define temporary setting and create properties
+						if($ID == 'padding'){
+							$temp
+								->set_is_responsive(true)
+								->load_type( 'margin' )
+								->set_data($data);
+
+							$properties		= array_merge($properties, $temp->get_css_data($ID));
+						}elseif($ID == 'margin'){
+							$temp
+								->set_is_responsive(true)
+								->load_type( 'margin' )
+								->set_data($data);
+
+							$properties		= array_merge($properties, $temp->get_css_data());
+						}elseif($ID == 'border'){
+							$temp
+								->set_is_responsive(true)
+								->load_type( 'border' )
+								->set_data($data);
+
+							$properties		= array_merge($properties, $temp->get_css_data());
+						}
 					}
 				}
-				if ($imploded) {
-					$properties['margin'] = $setting->prepare_css_property_responsive($imploded, '', '');
-				}
+				echo $_s->build_css(
+					is_admin() ? '.editor-styles-wrapper ul, .editor-styles-wrapper .wp-block-group.is-style-' . $extra_style['slug'] : '.sv100_sv_content_wrapper article ul, .sv100_sv_content_wrapper article .wp-block-group.is-style-' . $extra_style['slug'],
+					$properties
+				);
 			}
-
-			// Padding
-			// @todo: same as margin, refactor to avoid doubled code
-			if ($extra_style['padding']) {
-				$padding = $extra_style['padding'];
-
-				$imploded = false;
-				foreach ($padding as $breakpoint => $val) {
-					$top = (isset($val['top']) && strlen($val['top']) > 0) ? $val['top'] : false;
-					$right = (isset($val['right']) && strlen($val['right']) > 0) ? $val['right'] : false;
-					$bottom = (isset($val['bottom']) && strlen($val['bottom']) > 0) ? $val['bottom'] : false;
-					$left = (isset($val['left']) && strlen($val['left']) > 0) ? $val['left'] : false;
-
-					if($top !== false || $right !== false || $bottom !== false || $left !== false) {
-						$imploded[$breakpoint] = $top . ' ' . $right . ' ' . $bottom . ' ' . $left;
-					}
-				}
-				if ($imploded) {
-					$properties['padding'] = $setting->prepare_css_property_responsive($imploded, '', '');
-				}
-			}
-
-			// border
-			if ($extra_style['border']) {
-				$border = $extra_style['border'];
-
-				if ($border['top_width']) {
-					$val = $border['top_width'] . ' ' . $border['top_style'] . ' rgba(' . $border['color'] . ')';
-					$properties['border-top'] = $setting->prepare_css_property_responsive($val, '', '');
-				}
-				if ($border['right_width']) {
-					$val = $border['right_width'] . ' ' . $border['right_style'] . ' rgba(' . $border['color'] . ')';
-					$properties['border-right'] = $setting->prepare_css_property_responsive($val, '', '');
-				}
-				if ($border['bottom_width']) {
-					$val = $border['bottom_width'] . ' ' . $border['bottom_style'] . ' rgba(' . $border['color'] . ')';
-					$properties['border-bottom'] = $setting->prepare_css_property_responsive($val, '', '');
-				}
-				if ($border['left_width']) {
-					$val = $border['left_width'] . ' ' . $border['left_style'] . ' rgba(' . $border['color'] . ')';
-					$properties['border-left'] = $setting->prepare_css_property_responsive($val, '', '');
-				}
-
-				if ($border['top_left_radius'] + $border['top_right_radius'] + $border['bottom_right_radius'] + $border['bottom_left_radius'] !== 0) {
-					$border_radius = $border['top_left_radius'] . ' ' . $border['top_right_radius'] . ' ' . $border['bottom_right_radius'] . ' ' . $border['bottom_left_radius'];
-					$properties['border-radius'] = $setting->prepare_css_property_responsive($border_radius, '', '');
-				}
-			}
-
-			echo $setting->build_css(
-				is_admin() ? '.edit-post-visual-editor.editor-styles-wrapper .wp-block-group.is-style-' . $extra_style['slug'] : '.sv100_sv_content_wrapper article .wp-block-group.is-style-' . $extra_style['slug'],
-				$properties
-			);
 		}
 	}
