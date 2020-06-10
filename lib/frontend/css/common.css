@@ -3,6 +3,10 @@
     max-width: var(--sv100_sv_common-max-width-text);
 }*/
 
+.wp-block-group {
+	clear:both;
+}
+
 .wp-block-group.has-background {
 	padding: 20px 30px;
 	margin-top: 0;
