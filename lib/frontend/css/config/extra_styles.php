@@ -7,7 +7,7 @@
 			if($extra_style) {
 				$properties				= array();
 
-				$fields					= array('padding','margin','border');
+				$fields					= array('padding','margin','border','custom_css');
 
 				// retrieve saved data
 				foreach($extra_style as $ID => $data){
@@ -38,6 +38,13 @@
 								->set_data($data);
 
 							$properties		= array_merge($properties, $temp->get_css_data());
+						}elseif($ID == 'custom_css'){
+							$temp
+								->set_is_responsive(true)
+								->load_type( 'textarea' )
+								->set_data($data);
+
+							echo $temp->wrap_media_queries();
 						}
 					}
 				}

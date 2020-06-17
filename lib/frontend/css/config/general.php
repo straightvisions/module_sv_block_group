@@ -8,3 +8,5 @@
 			$script->get_parent()->get_setting('border')->get_css_data()
 		)
 	);
+
+	echo $script->get_parent()->get_setting('custom_css')->wrap_media_queries();

@@ -47,6 +47,12 @@
 				->set_is_responsive(true)
 				->load_type( 'border' );
 
+			$this->get_setting( 'custom_css' )
+				->set_title( __( 'Custom CSS', 'sv100' ) )
+				->set_is_responsive(true)
+				->set_code_editor('css')
+				->load_type( 'textarea' );
+
 			$this->get_setting( 'extra_styles' )
 				->set_title( __( 'Extra Styles', 'sv100' ) )
 				->load_type( 'group' );

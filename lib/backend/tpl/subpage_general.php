@@ -12,5 +12,10 @@
 				echo $module->get_setting( 'border' )->form();
 			?>
 		</div>
+		<div class="sv_setting_flex">
+			<?php
+				echo $module->get_setting( 'custom_css' )->form();
+			?>
+		</div>
 	</div>
 <?php } ?>
