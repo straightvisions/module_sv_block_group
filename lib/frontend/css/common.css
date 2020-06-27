@@ -1,8 +1,3 @@
-/*.wp-block-group {
-    width: 100%;
-    max-width: var(--sv100_sv_common-max-width-text);
-}*/
-
 .wp-block-group {
 	clear:both;
 }
@@ -11,4 +6,11 @@
 	padding: 20px;
 	margin-top: 0;
 	margin-bottom: 0;
+}
+
+.sv100_sv_content_wrapper > article > .wp-block-group.alignfull{
+	/* override any settings behaviour */
+	width:calc( 100% + 40px ) !important; /* @todo add css var for selected padding */
+	max-width:calc( 100% + 40px ) !important;
+	margin-left:-20px !important;
 }
