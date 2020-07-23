@@ -1,6 +1,7 @@
 <?php
 	$extra_styles			= $script->get_parent()->get_setting('extra_styles');
-	$extra_styles_data		= $script->get_parent()->get_setting('extra_styles')->get_data();
+	$extra_styles_data		= $extra_styles->get_data();
+
 	if($extra_styles_data && is_array($extra_styles_data) && count($extra_styles_data) > 0) {
 		// loop through saved group setting values
 		foreach($extra_styles_data as $extra_style) {
