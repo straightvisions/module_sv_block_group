@@ -1,24 +1,16 @@
 <?php
 	namespace sv100;
 
-	/**
-	 * @version         4.001
-	 * @author			straightvisions GmbH
-	 * @package			sv100
-	 * @copyright		2019 straightvisions GmbH
-	 * @link			https://straightvisions.com
-	 * @since			1.000
-	 * @license			See license.txt or https://straightvisions.com
-	 */
-
 	class sv_block_group extends init {
 		public function init() {
 			$this->set_module_title( __( 'Block: Group', 'sv100' ) )
 				->set_module_desc( __( 'Settings for Gutenberg Block', 'sv100' ) )
+				->set_css_cache_active()
 				->set_section_title( $this->get_module_title() )
 				->set_section_desc( $this->get_module_desc() )
 				->set_section_type( 'settings' )
-				->set_section_template_path( $this->get_path( 'lib/backend/tpl/settings.php' ) )
+				->set_section_template_path()
+				->set_section_order(5000)
 				->get_root()
 				->add_section( $this );
 		}
@@ -84,35 +76,19 @@
 		}
 
 		protected function register_scripts(): sv_block_group {
-			$attributes		= array();
+			parent::register_scripts();
 
+			// Register Block Styles
+			$attributes		= array();
 			if($this->get_setting('extra_styles')->get_data() && count($this->get_setting('extra_styles')->get_data()) > 0) {
 				foreach ($this->get_setting('extra_styles')->get_data() as $extra_style) {
 					$attributes[$extra_style['slug']] = $extra_style['entry_label'];
 				}
 			}
 
-			// Register Block Styles
 			if(count($attributes) > 0) {
-				$this->get_script('block')
-					->set_path('lib/backend/js/block.js')
-					->set_type('js')
-					->set_is_gutenberg()
-					->set_is_backend()
-					->set_deps(array('wp-blocks', 'wp-dom'))
-					->set_localized($attributes)
-					->set_is_enqueued();
+				$this->get_script('block_extra_styles')->set_localized($attributes);
 			}
-
-			// Register Styles
-			$this->get_script( 'common' )
-				->set_is_gutenberg()
-				->set_path( 'lib/frontend/css/common.css' );
-
-			$this->get_script( 'config' )
-				->set_path( 'lib/frontend/css/config.php' )
-				->set_is_gutenberg()
-				->set_inline( true );
 
 			return $this;
 		}
