@@ -1,5 +1,5 @@
 <?php
-	$extra_styles			= $script->get_parent()->get_setting('extra_styles');
+	$extra_styles			= $module->get_setting('extra_styles');
 	$extra_styles_data		= $extra_styles->get_data();
 
 	if($extra_styles_data && is_array($extra_styles_data) && count($extra_styles_data) > 0) {
@@ -15,7 +15,7 @@
 					// only for group fields needed (no label or ID fields are used for output)
 					if(in_array($ID,$fields)) {
 						// create a new setting object and clone it to avoid cross-interferences with more than one setting group items
-						$temp = clone $script->get_parent()->get_setting('temp_'.$ID);
+						$temp = clone $module->get_setting('temp_'.$ID);
 
 						// define temporary setting and create properties
 						if($ID == 'padding'){
