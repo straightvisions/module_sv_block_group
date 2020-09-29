@@ -101,8 +101,9 @@
 				$this->load_settings()->register_scripts();
 			}
 
-			$this->get_script( 'common' )->set_is_enqueued();
-			$this->get_script( 'config' )->set_is_enqueued();
+			foreach($this->get_scripts() as $script){
+				$script->set_is_enqueued();
+			}
 
 			return $this;
 		}
