@@ -77,6 +77,11 @@
 		protected function register_scripts(): sv_block_group {
 			parent::register_scripts();
 
+			// Register Default Styles
+			$this->get_script( 'no-padding' )
+			     ->set_is_gutenberg()
+			     ->set_path( 'lib/css/common/style_no_padding.css' );
+			
 			// Register Block Styles
 			$attributes		= array();
 			if($this->get_setting('extra_styles')->get_data() && count($this->get_setting('extra_styles')->get_data()) > 0) {
@@ -91,6 +96,7 @@
 
 			return $this;
 		}
+		
 		public function enqueue_scripts(): sv_block_group {
 			if(!$this->has_block_frontend('group')){
 				return $this;
@@ -106,4 +112,6 @@
 
 			return $this;
 		}
+		
+	
 	}
