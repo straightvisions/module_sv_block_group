@@ -79,8 +79,8 @@
 
 			// Register Default Styles
 			$this->get_script( 'no-padding' )
-			     ->set_is_gutenberg()
-			     ->set_path( 'lib/css/common/style_no_padding.css' );
+				 ->set_is_gutenberg()
+				 ->set_path( 'lib/css/common/style_no_padding.css' );
 			
 			// Register Block Styles
 			$attributes		= array();
