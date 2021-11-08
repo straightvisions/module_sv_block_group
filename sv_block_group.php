@@ -81,6 +81,10 @@
 			$this->get_script( 'no-padding' )
 				 ->set_is_gutenberg()
 				 ->set_path( 'lib/css/common/style_no_padding.css' );
+
+			$this->get_script( 'no-padding-vertical' )
+				->set_is_gutenberg()
+				->set_path( 'lib/css/common/style_no_padding_vertical.css' );
 			
 			// Register Block Styles
 			$attributes		= array();
