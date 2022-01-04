@@ -32,6 +32,17 @@
 				->set_is_responsive(true)
 				->load_type( 'margin' );
 
+			$this->get_setting( 'bg_padding' )
+				->set_title( __( 'Padding when Group has Background Color', 'sv100' ) )
+				->set_is_responsive(true)
+				->set_default_value(array(
+					'top'		=> '20px',
+					'right'		=> '20px',
+					'bottom'	=> '20px',
+					'left'		=> '20px'
+				))
+				->load_type( 'margin' );
+
 			$this->get_setting( 'border' )
 				->set_title( __( 'Border', 'sv100' ) )
 				->set_is_responsive(true)

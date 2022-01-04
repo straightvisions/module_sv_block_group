@@ -5,6 +5,7 @@
 			<?php
 				echo $module->get_setting( 'margin' )->form();
 				echo $module->get_setting( 'padding' )->form();
+				echo $module->get_setting( 'bg_padding' )->form();
 			?>
 		</div>
 		<div class="sv_setting_flex">
