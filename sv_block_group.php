@@ -16,6 +16,19 @@
 		}
 
 		protected function load_settings(): sv_block_group {
+			$this->get_setting( 'sticky_offset' )
+				->set_title( __( 'Style Sticky: Offset', 'sv100' ) )
+				->set_description( __( 'Top Offset in Pixel for Sticky style.', 'sv100' ) )
+				->set_is_responsive(true)
+				->set_default_value(0)
+				->load_type( 'number' );
+
+			$this->get_setting( 'section_dynamic_visibility' )
+				->set_title( __( 'Sections: Dynamic Visibility', 'sv100' ) )
+				->set_description( __( 'Enable this if groups with section-tag should be hidden (except first one). Use navigation elements with anchor to section-IDs to switch through sections.', 'sv100' ) )
+				->set_is_responsive(true)
+				->load_type( 'checkbox' );
+
 			$this->get_setting( 'margin' )
 				->set_title( __( 'Margin', 'sv100' ) )
 				->set_is_responsive(true)
@@ -85,17 +98,53 @@
 			return $this;
 		}
 
+		protected function section_dynamic_visibility_status(): bool{
+			$section_status = $this->get_setting('section_dynamic_visibility')->get_data();
+			$load_section_script		= false;
+			if(is_string($section_status) && $section_status == 1){
+				$load_section_script	= true;
+			}
+			if(is_array($section_status)){
+				foreach($section_status as $section_status_responsive){
+					if($section_status_responsive == 1){
+						$load_section_script	= true;
+					}
+				}
+			}
+
+			return $load_section_script;
+		}
+
 		protected function register_scripts(): sv_block_group {
 			parent::register_scripts();
 
 			// Register Default Styles
-			$this->get_script( 'no-padding' )
+			$this->get_script( 'no_padding' )
 				 ->set_is_gutenberg()
 				 ->set_path( 'lib/css/common/style_no_padding.css' );
 
-			$this->get_script( 'no-padding-vertical' )
+			$this->get_script( 'no_padding_vertical' )
 				->set_is_gutenberg()
 				->set_path( 'lib/css/common/style_no_padding_vertical.css' );
+
+			$this->get_script( 'sticky' )
+				->set_is_gutenberg()
+				->set_path( 'lib/css/common/style_sticky.css' );
+
+			if($this->section_dynamic_visibility_status()){
+				$this->get_script( 'section_visibility' )
+					->set_path( 'lib/css/common/section_visibility.css' );
+
+				$this->get_script( 'section_visibility_editor' )
+					->set_is_backend()
+					->set_is_gutenberg()
+					->set_path( 'lib/css/common/section_visibility_editor.css' );
+
+				$this->get_script( 'section_visibility_js' )
+					->set_type('js')
+					->set_path( 'lib/js/frontend/section_visibility.js' );
+			}
+
 			
 			// Register Block Styles
 			$attributes		= array();
