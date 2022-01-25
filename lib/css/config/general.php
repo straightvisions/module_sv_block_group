@@ -20,7 +20,7 @@
 			//'.editor-styles-wrapper section.wp-block-group:not(:first-of-type):not(.section_active), '. // Default Section Visibility State per Responsive Setting
 			//'.editor-styles-wrapper section.wp-block-group.section_not_active' // Default Section Not Visibility State when not active Class is added
 			:
-			'section.wp-block-group:not(:first-of-type):not(.section_active), '. // Default Section Visibility State per Responsive Setting
+			'section.wp-block-group:not(.section_active), '. // Default Section Visibility State per Responsive Setting
 			'section.wp-block-group.section_not_active', // Default Section Not Visibility State when not active Class is added
 		array_merge(
 			$properties

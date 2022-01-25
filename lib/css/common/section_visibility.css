@@ -2,8 +2,7 @@
 	transform-origin: top;
 	transition: opacity 0.25s ease;
 }
-section.wp-block-group.section_not_active,
-section.wp-block-group:not(:first-of-type):not(.section_not_active):not(.section_active){
+section.wp-block-group:not(.section_not_active):not(.section_active){
 	max-height: 0;
 	overflow: hidden;
 	transform: scaleY(0);
