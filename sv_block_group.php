@@ -11,8 +11,13 @@
 				->set_section_template_path()
 				->set_section_order(5000)
 				->set_section_icon('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M22 6v16h-16v-16h16zm2-2h-20v20h20v-20zm-24-4v20h2v-18h18v-2h-20z"/></svg>')
+				->add_metaboxes()
 				->get_root()
 				->add_section( $this );
+
+			/*add_action('init', function(){
+				$this->load_settings()->add_metaboxes();
+			});*/
 		}
 
 		protected function load_settings(): sv_block_group {
@@ -98,7 +103,25 @@
 			return $this;
 		}
 
-		protected function section_dynamic_visibility_status(): bool{
+		private function add_metaboxes(): sv_block_group{
+			$this->metaboxes = $this->get_root()->get_module('sv_metabox');
+
+			$states = array(
+				'0' => __('Disabled', 'sv100'),
+				'1' => __('Enabled', 'sv100')
+			);
+
+			$this->metaboxes->get_setting( $this->get_prefix('sections_dynamic_visibility') )
+				->set_title( __('Group Sections: Dynamic Visibility', 'sv100') )
+				->set_description( __('Enable this to allow showing/hiding Block Group Sections.', 'sv100') )
+				->set_default_value('0')
+				->load_type( 'select' )
+				->set_options($states);
+
+			return $this;
+		}
+
+		public function section_dynamic_visibility_status(): bool{
 			$section_status = $this->get_setting('section_dynamic_visibility')->get_data();
 			$load_section_script		= false;
 			if(is_string($section_status) && $section_status == 1){
@@ -113,6 +136,22 @@
 			}
 
 			return $load_section_script;
+		}
+
+		public function section_dynamic_visibility_status_post(): string{
+			global $post;
+
+			if (!$post) {
+				return false;
+			}
+
+			if(!$this->section_dynamic_visibility_status()){
+				return false;
+			}
+
+			$setting = $this->metaboxes->get_data($post->ID, $this->get_prefix('sections_dynamic_visibility'), 0);
+
+			return boolval($setting);
 		}
 
 		protected function register_scripts(): sv_block_group {
@@ -131,7 +170,7 @@
 				->set_is_gutenberg()
 				->set_path( 'lib/css/common/style_sticky.css' );
 
-			if($this->section_dynamic_visibility_status()){
+			if(is_admin() ? $this->section_dynamic_visibility_status() : $this->section_dynamic_visibility_status_post()){
 				$this->get_script( 'section_visibility' )
 					->set_path( 'lib/css/common/section_visibility.css' );
 
@@ -144,7 +183,6 @@
 					->set_type('js')
 					->set_path( 'lib/js/frontend/section_visibility.js' );
 			}
-
 			
 			// Register Block Styles
 			$attributes		= array();
@@ -171,11 +209,14 @@
 			}
 
 			foreach($this->get_scripts() as $script){
+				// CSS inline due to sections may be on some pages, on some not
+				if($script->get_type() === 'css'){
+					$script->set_inline(true);
+				}
+
 				$script->set_is_enqueued();
 			}
 
 			return $this;
 		}
-		
-	
 	}
