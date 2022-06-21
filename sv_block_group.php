@@ -112,20 +112,4 @@
 
 			return $this;
 		}
-		
-		public function enqueue_scripts(): sv_block_group {
-			if(!$this->has_block_frontend('group')){
-				return $this;
-			}
-
-			if(!is_admin()){
-				$this->load_settings()->register_scripts();
-			}
-
-			foreach($this->get_scripts() as $script){
-				$script->set_is_enqueued();
-			}
-
-			return $this;
-		}
 	}
