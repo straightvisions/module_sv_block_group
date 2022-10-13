@@ -4,6 +4,3 @@
 .wp-block-group__inner-container{
 	width:100%;
 }
-.wp-block-group.has-background{
-	padding:var(--wp--custom--sv-spacing);
-}
